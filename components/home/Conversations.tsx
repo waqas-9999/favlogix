@@ -40,7 +40,7 @@ const conversations: ConversationItem[] = [
 
 function Conversations() {
   return (
-    <div className="min-w-62.25 w-full bg-[#FAFAF8] rounded-tr-[11.23px] rounded-br-[11.23px] h-[90vh]">
+    <div className="min-w-62.25 w-full bg-[#FAFAF8] rounded-tr-[11.23px] rounded-br-[11.23px] h-auto lg:h-[90vh]">
       
       {/* Header */}
       <div className="px-[11.23px] py-[5.61px] border-b border-[#D8DEE4] flex justify-between w-full items-center h-[42.11px]">
