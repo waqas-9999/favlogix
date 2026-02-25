@@ -1,5 +1,19 @@
 import Image from 'next/image'
 
+const CHAT_DATA_ITEMS = [
+    { label: 'Assignee', value: 'Assignee', withIcon: true },
+    { label: 'Team', value: 'Sales Team', withIcon: true },
+] as const
+
+const CONTACT_DATA_ITEMS = [
+    { label: 'First Name', value: 'Olivia' },
+    { label: 'Last Name', value: 'Mckinsey' },
+    { label: 'Phone number', value: '+1 (312) 555-0134' },
+    { label: 'Email', value: 'olivia.Mckinsey@gmail.com' },
+] as const
+
+const CONTACT_LABELS = ['Closed Won', 'Chicago'] as const
+
 function Details() {
     return (
         <div className="min-w-[294.03px] flex-1 bg-[#FAFAF8] rounded-[11.23px] h-[90vh]">
@@ -25,24 +39,17 @@ function Details() {
                         </div>
                     </div>
                     <div className='flex flex-col gap-[2.81px]'>
-                        <div className="flex justify-between h-[26.67px] w-full items-center">
-                            <div className="flex justify-between items-center w-full">
-                                <span className="text-[9.82px] text-[#909090] font-[457] flex-1">Assignee</span>
-                                <div className='flex gap-[5.61px] items-center flex-1'>
-                                    <Image src="/icons/unassigned.svg" alt="unassigned" width={16} height={16} />
-                                    <span className="text-[9.82px] font-[457]">Assignee</span>
+                        {CHAT_DATA_ITEMS.map(({ label, value, withIcon }) => (
+                            <div key={label} className="flex justify-between h-[26.67px] w-full items-center">
+                                <div className="flex justify-between items-center w-full">
+                                    <span className="text-[9.82px] text-[#909090] font-[457] flex-1">{label}</span>
+                                    <div className='flex gap-[5.61px] items-center flex-1'>
+                                        {withIcon && <Image src="/icons/unassigned.svg" alt="unassigned" width={16} height={16} />}
+                                        <span className="text-[9.82px] font-[457]">{value}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="flex justify-between h-[26.67px] w-full items-center">
-                            <div className="flex justify-between items-center w-full">
-                                <span className="text-[9.82px] text-[#909090] font-[457] flex-1">Team</span>
-                                <div className='flex gap-[5.61px] items-center flex-1'>
-                                    <Image src="/icons/unassigned.svg" alt="unassigned" width={16} height={16} />
-                                    <span className="text-[9.82px] font-[457]">Sales Team</span>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
                 <div className='border-t border-[#D8DEE4] px-[11.23px] py-[5.61px] flex flex-col gap-[2.81px]'>
@@ -52,38 +59,16 @@ function Details() {
                             <Image src="/icons/down.svg" alt="down" width={14} height={14} />
                         </div>
                     </div>
-                    <div className="flex justify-between h-[26.67px] w-full items-center">
-                        <div className="flex justify-between items-center w-full">
-                            <span className="text-[9.82px] text-[#909090] font-[457] flex-1">First Name</span>
-                            <div className='flex gap-[5.61px] items-center flex-1'>
-                                <span className="text-[9.82px] font-[556]">Olivia</span>
+                    {CONTACT_DATA_ITEMS.map(({ label, value }) => (
+                        <div key={label} className="flex justify-between h-[26.67px] w-full items-center">
+                            <div className="flex justify-between items-center w-full">
+                                <span className="text-[9.82px] text-[#909090] font-[457] flex-1">{label}</span>
+                                <div className='flex gap-[5.61px] items-center flex-1'>
+                                    <span className="text-[9.82px] font-[556]">{value}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex justify-between h-[26.67px] w-full items-center">
-                        <div className="flex justify-between items-center w-full">
-                            <span className="text-[9.82px] text-[#909090] font-[457] flex-1">Last Name</span>
-                            <div className='flex gap-[5.61px] items-center flex-1'>
-                                <span className="text-[9.82px] font-[556]">Mckinsey</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex justify-between h-[26.67px] w-full items-center">
-                        <div className="flex justify-between items-center w-full">
-                            <span className="text-[9.82px] text-[#909090] font-[457] flex-1">Phone number</span>
-                            <div className='flex gap-[5.61px] items-center flex-1'>
-                                <span className="text-[9.82px] font-[556]">+1 (312) 555-0134</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex justify-between h-[26.67px] w-full items-center">
-                        <div className="flex justify-between items-center w-full">
-                            <span className="text-[9.82px] text-[#909090] font-[457] flex-1">Email</span>
-                            <div className='flex gap-[5.61px] items-center flex-1'>
-                                <span className="text-[9.82px] font-[556]">olivia.Mckinsey@gmail.com</span>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                     <div className="flex justify-between h-[26.67px] w-full items-center">
                         <div className="flex justify-between items-center w-full">
                             <span className="text-[9.82px] text-[#000000] font-[656] flex-1">See all</span>
@@ -99,8 +84,15 @@ function Details() {
                         </div>
                     </div>
                     <div className='flex gap-[4.21px]'>
-                        <div className='border-2 border-[#007AEC] rounded-full text-[#007AEC] text-[8.42px] font-[656] flex items-center self-start gap-[3.61px] px-[3.61px] w-[75.07px] h-[19.65px]'><Image src="/icons/tag.svg" alt="tag" width={11} height={11} />Closed Won</div>
-                        <div className='border-2 border-[#007AEC] rounded-full text-[#007AEC] text-[8.42px] font-[656] flex items-center self-start gap-[3.61px] px-[3.61px] h-[19.65px]'><Image src="/icons/tag.svg" alt="tag" width={11} height={11} />Chicago</div>
+                        {CONTACT_LABELS.map((label, i) => (
+                            <div
+                                key={label}
+                                className={`border-2 border-[#007AEC] rounded-full text-[#007AEC] text-[8.42px] font-[656] flex items-center self-start gap-[3.61px] px-[3.61px] h-[19.65px] ${i === 0 ? 'w-[75.07px]' : ''}`}
+                            >
+                                <Image src="/icons/tag.svg" alt="tag" width={11} height={11} />
+                                {label}
+                            </div>
+                        ))}
                         <div className='w-[19.09px] h-[19.09px] rounded-full border-2 border-[#007AEC] flex items-center justify-center'>
                             <Image src="/icons/add.svg" alt="add" width={9} height={9} />
                         </div>

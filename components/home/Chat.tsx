@@ -69,7 +69,7 @@ function Chat() {
     }, []);
 
     return (
-        <div className="min-w-116 w-full bg-[#FAFAF8] rounded-[8.42px] shadow-[0px_4px_24px_0px_#E7EBEC] h-[90vh] flex flex-col relative">
+        <div className="lg:min-w-116 w-full bg-[#FAFAF8] rounded-[8.42px] shadow-[0px_4px_24px_0px_#E7EBEC] h-[90vh] flex flex-col relative">
 
             {/* Header */}
             <div className="px-[11.23px] py-[5.61px] border-b border-[#D8DEE4] flex justify-between w-full items-center h-[42.11px] shrink-0">
