@@ -27,7 +27,6 @@ function Header() {
               </svg>
             )}
           </button>
-        {/* Left: Logo + desktop nav / mobile hamburger */}
         <div className="flex items-center gap-[5.61px] min-w-0 flex-1">
           <Image
             src="/images/Logo.svg"
@@ -36,7 +35,6 @@ function Header() {
             height={22}
             className="shrink-0"
           />
-          {/* Desktop nav — same as original */}
           <nav className="hidden md:flex items-center gap-[5.61px] flex-wrap">
             <button className="bg-[#EFF2F2] text-[9.82px] font-[556] w-[59.61px] h-5.75 items-center flex rounded-[5.61px] border-[0.7px] border-[#D8DEE4] gap-[5.61px] px-[7.02px]">
               <Image src="/icons/inbox.svg" alt="Inbox" width={14} height={14} />
@@ -61,7 +59,6 @@ function Header() {
           </nav>
         </div>
 
-        {/* Right: Settings + user — responsive */}
         <div className="flex gap-2 items-center shrink-0">
           <button className="w-7.25 h-6.25 flex items-center justify-center" aria-label="Settings">
             <Image src="/icons/settings.svg" alt="Settings" width={14} height={14} />
