@@ -2,6 +2,7 @@ import PolygonCard from "@/components/global/icon/hexagon";
 import Image from "next/image";
 import Inbox from "./Inbox";
 import Header from "@/components/global/header/header";
+import Link from "next/link";
 
 function Home() {
     return (
@@ -67,6 +68,7 @@ function Home() {
                         </div>
                         <div className="w-full flex justify-start relative top-7 left-12">
                             <PolygonCard size={80}>
+                                <Link href="/inbox">
                                 <Image
                                     src="/icons/inbox-white.svg"
                                     alt="icon"
@@ -74,6 +76,7 @@ function Home() {
                                     height={18}
                                     className="opacity-60 text-white transition-opacity duration-300 group-hover:opacity-100"
                                 />
+                                </Link>
                             </PolygonCard>
                         </div>
                         <div className="w-full flex justify-end relative right-32">
