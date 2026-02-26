@@ -7,7 +7,7 @@ export default function InboxLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="p-[7.75px]">
+    <div className="p-[7.75px] bg-[#EFF0EB]">
       <Header />
       {children}
     </div>

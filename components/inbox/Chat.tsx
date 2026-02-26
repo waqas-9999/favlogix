@@ -64,9 +64,9 @@ const messages: Message[] = [
 function Chat() {
     const bottomRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, []);
+    // useEffect(() => {
+    //     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // }, []);
 
     return (
         <div className="lg:min-w-116 w-full bg-[#FAFAF8] rounded-[8.42px] shadow-[0px_4px_24px_0px_#E7EBEC] h-[90vh] flex flex-col relative">
