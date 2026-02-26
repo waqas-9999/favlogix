@@ -1,9 +1,9 @@
-import Sidebar from "@/components/home/Sidebar";
-import Conversations from "@/components/home/Conversations";
-import Chat from "@/components/home/Chat";
-import Details from "@/components/home/Details";
+import Sidebar from "@/components/inbox/Sidebar";
+import Conversations from "@/components/inbox/Conversations";
+import Chat from "@/components/inbox/Chat";
+import Details from "@/components/inbox/Details";
 
-export default function Home() {
+export default function Inbox() {
   return (
     <>
       <div className="hidden min-[1188px]:flex pt-[7.75px] gap-[7.75px]">
