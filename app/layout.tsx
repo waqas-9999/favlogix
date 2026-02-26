@@ -6,13 +6,11 @@ import { Roboto } from "next/font/google";
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
-  variable: "--font-roboto",
   display: "swap",
 });
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
   display: "swap",
 });
 
@@ -28,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${roboto.variable} antialiased overflow-hidden h-screen`}>
+      <body className={`${inter.className} ${roboto.className} antialiased`}>
         {children}
       </body>
     </html>
