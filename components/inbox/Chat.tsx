@@ -27,9 +27,9 @@ function ChatContent({ conversationId }: { conversationId: string }) {
     const bottomRef = useRef<HTMLDivElement>(null);
     const [inputValue, setInputValue] = useState("");
 
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+    // useEffect(() => {
+    //     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // }, [messages]);
 
     const handleSend = async () => {
         const trimmed = inputValue.trim();

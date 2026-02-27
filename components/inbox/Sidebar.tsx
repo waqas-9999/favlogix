@@ -48,7 +48,7 @@ function Sidebar({ conversations }: Props) {
     { label: "Unassigned", icon: "/icons/unassigned.svg", count: counts.unassigned, filterKey: "unassigned" },
   ];
   return (
-    <div className="min-w-42 w-full bg-[#FAFAF8] rounded-tl-[11.23px] border-r border-[#0000003D] rounded-bl-[11.23px] h-auto lg:h-[90vh]">
+    <div className="min-w-42 bg-[#FAFAF8] rounded-tl-[11.23px] border-r border-[#0000003D] rounded-bl-[11.23px] h-auto lg:h-[90vh]">
       <div className="px-[11.23px] py-[5.61px] flex justify-start items-center h-[42.11px]">
         <span className="text-[12.63px] font-[790]">Inbox</span>
       </div>

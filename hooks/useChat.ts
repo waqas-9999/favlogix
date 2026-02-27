@@ -21,7 +21,7 @@ export function useChat(conversationId: string) {
       try {
         const msgs = await getMessagesByConversation(conversationId);
         // artificial delay so skeletons are visible
-        await delay(1500);
+        await delay(2000);
         setMessages(msgs);
       } catch (err: any) {
         setError(err.message || "Error fetching messages");

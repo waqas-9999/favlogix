@@ -2,15 +2,24 @@ import React from "react";
 
 export default function SkeletonConversationItem() {
   return (
-    <div className="animate-pulse flex items-center gap-3 bg-transparent px-[8.42px] py-[5.61px]">
-      <div className="w-[19.65px] h-[19.65px] rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
-      <div className="flex-1">
-        <div className="flex justify-between items-start">
-          <div className="h-[10px] bg-gray-200 dark:bg-gray-700 rounded w-2/3" />
-          <div className="h-[8px] bg-gray-200 dark:bg-gray-700 rounded w-10 ml-2" />
+    <div>
+    <div className="animate-pulse bg-white rounded-lg border border-[#E5E7EB] h-12.5 shadow-sm px-3 py-1.25 flex items-center gap-1.5 w-full">
+      
+      {/* Avatar */}
+      <div className="w-[19.64px] h-[19.64px] rounded-full bg-[#F2F2F2] shrink-0" />
+
+      {/* Text Content */}
+      <div className="flex flex-col justify-center w-full gap-1.5">
+        
+        <div className="flex justify-between items-center w-full">
+          <div className="h-1.5 bg-[#D9D9D9] rounded w-10" />
+          <div className="h-1.5 bg-[#D9D9D9] rounded w-4" />
         </div>
-        <div className="mt-2 h-[9px] bg-gray-200 dark:bg-gray-700 rounded w-4/5" />
+
+        <div className="h-1.5 bg-[#E5E7EB] rounded w-[70%]" />
+
       </div>
+    </div>
     </div>
   );
 }
