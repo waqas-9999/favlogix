@@ -15,10 +15,20 @@ export function useChat(conversationId: string) {
   useEffect(() => {
     if (!conversationId) return;
     setLoading(true);
-    getMessagesByConversation(conversationId)
-      .then((msgs) => setMessages(msgs))
-      .catch((err) => setError(err.message || "Error fetching messages"))
-      .finally(() => setLoading(false));
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    (async () => {
+      try {
+        const msgs = await getMessagesByConversation(conversationId);
+        // artificial delay so skeletons are visible
+        await delay(1500);
+        setMessages(msgs);
+      } catch (err: any) {
+        setError(err.message || "Error fetching messages");
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [conversationId]);
 
   const sendMessage = async (content: string) => {

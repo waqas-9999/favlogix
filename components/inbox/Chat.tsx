@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useInbox } from "@/store/inboxStoreV2";
 import { useChat } from "@/hooks/useChat";
 import { SkeletonLoader, ErrorMessage } from "@/components/ui";
+import SkeletonMessageBubble from "@/components/ui/SkeletonMessageBubble";
 
 function Chat() {
     const { state } = useInbox();
@@ -44,7 +45,22 @@ function ChatContent({ conversationId }: { conversationId: string }) {
         }
     };
 
-    if (loading) return <SkeletonLoader rows={5} />;
+    if (loading)
+        return (
+            <div className="lg:min-w-116 w-full bg-[#FAFAF8] rounded-[8.42px] shadow-[0px_4px_24px_0px_#E7EBEC] h-[90vh] flex flex-col">
+                <div className="px-[11.23px] py-[5.61px] border-b border-[#D8DEE4] flex justify-between w-full items-center h-[42.11px] shrink-0">
+                    <div className="flex gap-[8.42px] items-center">
+                        <span className="text-[12.63px] font-[790] p-[7.02px]">Chat</span>
+                    </div>
+                </div>
+                <div className="flex-1 overflow-y-auto px-[11.23px] pt-[9.12px] pb-25 flex flex-col gap-[9.12px]">
+                    <SkeletonMessageBubble align="left" width="60%" />
+                    <SkeletonMessageBubble align="right" width="40%" />
+                    <SkeletonMessageBubble align="left" width="70%" />
+                    <SkeletonMessageBubble align="right" width="50%" />
+                </div>
+            </div>
+        );
     if (error) return <ErrorMessage message={error} />;
 
     return (

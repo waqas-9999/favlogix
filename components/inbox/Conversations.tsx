@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useInbox } from "@/store/inboxStoreV2";
 import { useConversations } from "@/hooks/useConversations";
 import { SkeletonLoader, ErrorMessage } from "@/components/ui";
+import SkeletonConversationItem from "@/components/ui/SkeletonConversationItem";
 import { Conversation } from "@/types";
 
 type SortOption = "newest" | "oldest" | "alphabetical";
@@ -89,7 +90,14 @@ function Conversations() {
     return 0;
   });
 
-  if (loading) return <SkeletonLoader rows={5} />;
+  if (loading)
+    return (
+      <div className="px-[8.42px] py-[5.61px]">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <SkeletonConversationItem key={i} />
+        ))}
+      </div>
+    );
   if (error) return <ErrorMessage message={error} />;
 
   const filterOptions = [

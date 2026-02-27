@@ -5,6 +5,7 @@ import { useInbox } from "@/store/inboxStoreV2";
 import { useConversations } from "@/hooks/useConversations";
 import { useEffect, useState } from 'react';
 import * as userService from '@/services/userService';
+import SkeletonDetailsPanel from '@/components/ui/SkeletonDetailsPanel';
 
 function Details() {
     const { state } = useInbox();
@@ -12,18 +13,27 @@ function Details() {
     
     const activeConv = conversations.find(c => c.id === state.activeConversationId);
     const [fullUser, setFullUser] = useState<any | null>(null);
+    const [loadingUser, setLoadingUser] = useState(false);
 
     useEffect(() => {
         let mounted = true;
+        const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
         if (activeConv) {
             const id = activeConv.id;
-            userService.getUserById(Number(id))
-                .then((u) => {
+            setLoadingUser(true);
+            (async () => {
+                try {
+                    const u = await userService.getUserById(Number(id));
+                    // artificial delay so skeleton is visible
+                    await delay(1500);
                     if (mounted) setFullUser(u);
-                })
-                .catch(() => {
+                } catch {
                     if (mounted) setFullUser(null);
-                });
+                } finally {
+                    if (mounted) setLoadingUser(false);
+                }
+            })();
         } else {
             setFullUser(null);
         }
@@ -34,6 +44,14 @@ function Details() {
         return (
             <div className="min-w-[294.03px] flex-1 bg-[#FAFAF8] rounded-[11.23px] h-[90vh] flex items-center justify-center">
                 <p className="text-gray-500">Select a conversation</p>
+            </div>
+        );
+    }
+
+    if (loadingUser) {
+        return (
+            <div className="min-w-[294.03px] flex-1 bg-[#FAFAF8] rounded-[11.23px] h-[90vh]">
+                <SkeletonDetailsPanel />
             </div>
         );
     }

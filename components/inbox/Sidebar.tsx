@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useInbox } from "@/store/inboxStoreV2";
+import { useMemo } from "react";
+import { Conversation } from "@/types/conversation";
 
 type Item = {
   label: string;
@@ -10,11 +12,11 @@ type Item = {
   filterKey?: string;
 };
 
-const inboxItems: Item[] = [
-  { label: "My Inbox", icon: "/icons/profile.svg", filterKey: "my_inbox" },
-  { label: "All", icon: "/icons/profiles.svg", count: 28, filterKey: "all" },
-  { label: "Unassigned", icon: "/icons/unassigned.svg", count: 5, filterKey: "unassigned" },
-];
+type Props = {
+  conversations?: Conversation[];
+};
+
+// inboxItems will be computed inside the component so counts stay in sync
 
 const teamItems: Item[] = [
   { label: "Sales", icon: "/icons/user.svg", count: 7, filterKey: "sales" },
@@ -26,8 +28,25 @@ const channelItems: Item[] = [
   { label: "Instagram", icon: "/icons/insta.svg", filterKey: "instagram" },
 ];
 
-function Sidebar() {
+function Sidebar({ conversations }: Props) {
   const { state, dispatch } = useInbox();
+
+  const agentName = process.env.NEXT_PUBLIC_AI_AGENT_NAME || "Michael";
+
+  const counts = useMemo(() => {
+    const all = conversations ? conversations.length : 0;
+    const myInbox = conversations
+      ? conversations.filter((c) => c.assignee?.name === agentName).length
+      : 0;
+    const unassigned = conversations ? conversations.filter((c) => c.status === "unassigned").length : 0;
+    return { all, myInbox, unassigned };
+  }, [conversations, agentName]);
+
+  const inboxItems: Item[] = [
+    { label: "My Inbox", icon: "/icons/profile.svg", count: counts.myInbox, filterKey: "my_inbox" },
+    { label: "All", icon: "/icons/profiles.svg", count: counts.all, filterKey: "all" },
+    { label: "Unassigned", icon: "/icons/unassigned.svg", count: counts.unassigned, filterKey: "unassigned" },
+  ];
   return (
     <div className="min-w-42 w-full bg-[#FAFAF8] rounded-tl-[11.23px] border-r border-[#0000003D] rounded-bl-[11.23px] h-auto lg:h-[90vh]">
       <div className="px-[11.23px] py-[5.61px] flex justify-start items-center h-[42.11px]">

@@ -11,10 +11,18 @@ export function useConversations(
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
     setLoading(true);
     // Fetch users and posts, then map users -> Conversation
-    Promise.all([userService.getUsers(), postService.getPosts()])
-      .then(([users, posts]) => {
+    (async () => {
+      try {
+        const [users, posts] = await Promise.all([userService.getUsers(), postService.getPosts()]);
+        // artificial delay so skeletons are visible
+        await delay(2000);
+
+        if (!mounted) return;
         const convs: Conversation[] = users.map((u) => {
           const userId = typeof (u as any).id === 'number' ? (u as any).id : Number((u as any).id);
           const userPosts = posts.filter((p) => p.userId === userId);
@@ -51,11 +59,16 @@ export function useConversations(
           filtered = convs.filter((c) => c.status === "unassigned");
         }
         setConversations(filtered);
-      })
-      .catch((err) => {
-        setError(err.message || "Error fetching conversations");
-      })
-      .finally(() => setLoading(false));
+      } catch (err: any) {
+        setError(err?.message || "Error fetching conversations");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, [filter]);
 
   return { conversations, loading, error };
