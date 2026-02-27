@@ -56,7 +56,7 @@ export default function SkeletonDetailsPanel() {
           <div className="flex-1"><Line w="40px" h={6} /></div>
         </div>
 
-        {[1, 2, 3].map((i) => (
+        {[1, 2].map((i) => (
           <div key={i} className="flex justify-between items-center h-[26.67px]">
             <div className="flex-1"><Line w="40px" h={6} /></div>
             <div className="flex-1"><Line w="40px" h={6} /></div>
