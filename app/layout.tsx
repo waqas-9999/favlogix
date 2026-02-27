@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Roboto } from "next/font/google";
+import { InboxProvider } from "@/store/inboxStoreV2";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -27,7 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} ${roboto.className} antialiased`}>
-        {children}
+        <InboxProvider>
+          {children}
+        </InboxProvider>
       </body>
     </html>
   );

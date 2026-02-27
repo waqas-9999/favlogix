@@ -1,4 +1,3 @@
-// app/inbox/layout.tsx
 import Header from "@/components/global/header/header";
 
 export default function InboxLayout({

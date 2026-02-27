@@ -1,20 +1,36 @@
-import Image from 'next/image'
+"use client";
 
-const CHAT_DATA_ITEMS = [
-    { label: 'Assignee', value: 'Assignee', withIcon: true },
-    { label: 'Team', value: 'Sales Team', withIcon: true },
-] as const
-
-const CONTACT_DATA_ITEMS = [
-    { label: 'First Name', value: 'Olivia' },
-    { label: 'Last Name', value: 'Mckinsey' },
-    { label: 'Phone number', value: '+1 (312) 555-0134' },
-    { label: 'Email', value: 'olivia.Mckinsey@gmail.com' },
-] as const
-
-const CONTACT_LABELS = ['Closed Won', 'Chicago'] as const
+import Image from 'next/image';
+import { useInbox } from "@/store/inboxStoreV2";
+import { useConversations } from "@/hooks/useConversations";
 
 function Details() {
+    const { state } = useInbox();
+    const { conversations } = useConversations("all");
+    
+    const activeConv = conversations.find(c => c.id === state.activeConversationId);
+
+    if (!activeConv) {
+        return (
+            <div className="min-w-[294.03px] flex-1 bg-[#FAFAF8] rounded-[11.23px] h-[90vh] flex items-center justify-center">
+                <p className="text-gray-500">Select a conversation</p>
+            </div>
+        );
+    }
+
+    const CHAT_DATA_ITEMS = [
+        { label: 'Assignee', value: activeConv.assignee?.name || 'Unassigned', withIcon: true },
+        { label: 'Team', value: activeConv.team === 'sales' ? 'Sales Team' : 'Customer Support Team', withIcon: true },
+    ] as const
+
+    const CONTACT_DATA_ITEMS = [
+        { label: 'Name', value: activeConv.contactName },
+        { label: 'Status', value: activeConv.status },
+        { label: 'Channel', value: activeConv.channel },
+    ] as const
+
+    const CONTACT_LABELS = activeConv.label ? [activeConv.label, activeConv.channel] : [activeConv.channel] as const
+
     return (
         <div className="min-w-[294.03px] flex-1 bg-[#FAFAF8] rounded-[11.23px] h-[90vh]">
 
@@ -107,7 +123,7 @@ function Details() {
                     </div>
                     <div className='flex flex-col gap-[4.21px]'>
                         <div className='bg-[#F5E096] rounded-[5.61px] text-[#007AEC] text-[8.42px] font-[656] flex items-center gap-[3.61px] px-[7.02px] w-full h-[25.26px]'>
-                            <input className='placeholder:text-[#00000066]' placeholder="Add a note" />
+                            <input className='placeholder:text-[#00000066] bg-transparent outline-none' placeholder="Add a note" />
                         </div>
                         <div className='bg-[#F5E096] rounded-[5.61px] text-[#000000] text-[8.42px] font-[457] flex items-center gap-[3.61px] px-[7.02px] w-full h-[25.26px]'>Strong potential for future upgrades </div>
 

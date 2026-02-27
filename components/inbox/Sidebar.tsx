@@ -1,40 +1,33 @@
+"use client";
+
 import Image from "next/image";
+import { useInbox } from "@/store/inboxStoreV2";
 
 type Item = {
   label: string;
   icon: string;
   count?: number;
-  active?: boolean;
+  filterKey?: string;
 };
 
 const inboxItems: Item[] = [
-  { label: "My Inbox", icon: "/icons/profile.svg" },
-  { label: "All", icon: "/icons/profiles.svg", count: 28 },
-  { label: "Unassigned", icon: "/icons/unassigned.svg", count: 5 },
+  { label: "My Inbox", icon: "/icons/profile.svg", filterKey: "my_inbox" },
+  { label: "All", icon: "/icons/profiles.svg", count: 28, filterKey: "all" },
+  { label: "Unassigned", icon: "/icons/unassigned.svg", count: 5, filterKey: "unassigned" },
 ];
 
 const teamItems: Item[] = [
-  { label: "Sales", icon: "/icons/user.svg", count: 7 },
-  { label: "Customer Support", icon: "/icons/user.svg", count: 16 },
-];
-
-const userItems: Item[] = [
-  { label: "Sarah Williams", icon: "/icons/user.svg", count: 7 },
-  {
-    label: "Michael Johnson",
-    icon: "/icons/user.svg",
-    count: 16,
-    active: true,
-  },
-  { label: "Emily Davis", icon: "/icons/user.svg" },
+  { label: "Sales", icon: "/icons/user.svg", count: 7, filterKey: "sales" },
+  { label: "Customer Support", icon: "/icons/user.svg", count: 16, filterKey: "customer_support" },
 ];
 
 const channelItems: Item[] = [
-  { label: "Fit4Life", icon: "/icons/whatsapp.svg" },
-  { label: "Fit4Life", icon: "/icons/insta.svg" },
+  { label: "WhatsApp", icon: "/icons/whatsapp.svg", filterKey: "whatsapp" },
+  { label: "Instagram", icon: "/icons/insta.svg", filterKey: "instagram" },
 ];
 
 function Sidebar() {
+  const { state, dispatch } = useInbox();
   return (
     <div className="min-w-42 w-full bg-[#FAFAF8] rounded-tl-[11.23px] border-r border-[#0000003D] rounded-bl-[11.23px] h-auto lg:h-[90vh]">
       <div className="px-[11.23px] py-[5.61px] flex justify-start items-center h-[42.11px]">
@@ -48,7 +41,22 @@ function Sidebar() {
           {inboxItems.map((item, index) => {
             if (!item.count) {
               return (
-                <button key={index} className="text-[9.82px] font-[556] h-6.5">
+                <button
+                  key={index}
+                  onClick={() => {
+                    if (item.filterKey) {
+                      dispatch({
+                        type: "SET_FILTER",
+                        payload: item.filterKey as "all" | "my_inbox" | "unassigned",
+                      });
+                    }
+                  }}
+                  className={`text-[9.82px] font-[556] h-6.5 rounded-[5.61px] ${
+                    state.activeFilter === item.filterKey
+                      ? "bg-blue-100"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
                   <div className="items-center flex rounded-[5.61px] gap-[5.61px] px-[7.02px] text-[10.73px] font-[457]">
                     <Image src={item.icon} alt={item.label} width={14} height={14} />
                     {item.label}
@@ -60,7 +68,19 @@ function Sidebar() {
             return (
               <button
                 key={index}
-                className="text-[9.82px] font-[556] h-6.5 flex justify-between w-full items-center px-[7.02px]"
+                onClick={() => {
+                  if (item.filterKey) {
+                    dispatch({
+                      type: "SET_FILTER",
+                      payload: item.filterKey as "all" | "my_inbox" | "unassigned",
+                    });
+                  }
+                }}
+                className={`text-[9.82px] font-[556] h-6.5 flex justify-between w-full items-center px-[7.02px] rounded-[5.61px] ${
+                  state.activeFilter === item.filterKey
+                    ? "bg-blue-100"
+                    : "hover:bg-gray-100"
+                }`}
               >
                 <div className="items-center flex rounded-[5.61px] gap-[5.61px] text-[10.73px] font-[457]">
                   <Image src={item.icon} alt={item.label} width={14} height={14} />
@@ -85,7 +105,19 @@ function Sidebar() {
           {teamItems.map((item, index) => (
             <button
               key={index}
-              className="text-[9.82px] font-[556] h-6.5 flex justify-between w-full items-center px-[7.02px]"
+              onClick={() => {
+                if (item.filterKey) {
+                  dispatch({
+                    type: "SET_TEAM",
+                    payload: item.filterKey as "sales" | "customer_support" | "all",
+                  });
+                }
+              }}
+              className={`text-[9.82px] font-[556] h-6.5 flex justify-between w-full items-center px-[7.02px] rounded-[5.61px] ${
+                state.activeTeam === item.filterKey
+                  ? "bg-blue-100"
+                  : "hover:bg-gray-100"
+              }`}
             >
               <div className="items-center flex rounded-[5.61px] gap-[5.61px] text-[9.82px] font-[457]">
                 <Image src={item.icon} alt={item.label} width={14} height={14} />
@@ -93,35 +125,6 @@ function Sidebar() {
               </div>
               <div className="text-[#222222] font-[457] text-[8.42px] h-[11.23px] px-1">
                 {item.count}
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {/* Users Title */}
-        <div className="flex justify-between items-center w-full px-[7.02px]">
-          <span className="text-[9.82px] font-[556]">Users</span>
-          <Image src="/icons/down.svg" alt="down" width={14} height={14} />
-        </div>
-
-        {/* Users */}
-        <div className="flex flex-col gap-0.5">
-          {userItems.map((item, index) => (
-            <button
-              key={index}
-              className={`text-[9.82px] font-[556] h-6.5 flex justify-between w-full items-center px-[7.02px] ${
-                item.active
-                  ? "rounded-[5.61px] border-[0.7px] border-[#D8DEE4] bg-white shadow-[0px_1.4px_8.42px_0px_#E7EBEC]"
-                  : ""
-              }`}
-            >
-              <div className="items-center flex rounded-[5.61px] gap-[5.61px] text-[9.82px] font-[457]">
-                <Image src={item.icon} alt={item.label} width={14} height={14} />
-                {item.label}
-              </div>
-
-              <div className="text-[#222222] font-[457] text-[8.42px] h-[11.23px] px-1">
-                {item.count ?? ""}
               </div>
             </button>
           ))}
@@ -138,7 +141,19 @@ function Sidebar() {
           {channelItems.map((item, index) => (
             <button
               key={index}
-              className="text-[9.82px] font-[556] h-6.5 flex justify-between w-full items-center px-[7.02px]"
+              onClick={() => {
+                if (item.filterKey) {
+                  dispatch({
+                    type: "SET_CHANNEL",
+                    payload: item.filterKey as "whatsapp" | "instagram" | "all",
+                  });
+                }
+              }}
+              className={`text-[9.82px] font-[556] h-6.5 flex justify-between w-full items-center px-[7.02px] rounded-[5.61px] ${
+                state.activeChannel === item.filterKey
+                  ? "bg-blue-100"
+                  : "hover:bg-gray-100"
+              }`}
             >
               <div className="items-center flex rounded-[5.61px] gap-[5.61px] text-[9.82px] font-[457]">
                 <Image src={item.icon} alt={item.label} width={14} height={14} />
