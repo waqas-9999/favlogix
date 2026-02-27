@@ -1,9 +1,17 @@
 import { NextRequest } from "next/server";
 
-const REQRES_URL = process.env.REQRES_URL || "https://reqres.in";
+const JSONPLACEHOLDER_URL = process.env.JSONPLACEHOLDER_URL || "https://jsonplaceholder.typicode.com";
 
 async function forward(url: string, init?: RequestInit) {
-  const res = await fetch(url, init);
+  const hdrs: Record<string, string> = {
+    "User-Agent": "Mozilla/5.0",
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": JSONPLACEHOLDER_URL,
+    ...(init && (init.headers as Record<string, string>))
+  };
+  const mergedInit = { ...(init || {}), headers: hdrs } as RequestInit;
+  const res = await fetch(url, mergedInit);
   const body = await res.text();
   const contentType = res.headers.get("content-type") || "application/json";
   return new Response(body, { status: res.status, headers: { "content-type": contentType } });
@@ -12,7 +20,6 @@ async function forward(url: string, init?: RequestInit) {
 export async function GET(req: Request) {
   const url = new URL((req as NextRequest).url);
   const qs = url.searchParams.toString();
-  // Proxy to reqres user list endpoint
-  const target = `${REQRES_URL}/api/users${qs ? `?${qs}` : ""}`;
+  const target = `${JSONPLACEHOLDER_URL}/users${qs ? `?${qs}` : ""}`;
   return forward(target, { method: "GET" });
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useMemo } from "react";
 import { useState } from "react";
 import { useInbox } from "@/store/inboxStoreV2";
 import { useConversations } from "@/hooks/useConversations";
@@ -55,6 +56,24 @@ function Conversations() {
       return new Date(timestamp).getTime();
     } catch {
       return 0;
+    }
+  };
+
+  const formatRelative = (iso: string) => {
+    try {
+      const now = Date.now();
+      const then = new Date(iso).getTime();
+      const diff = Math.floor((now - then) / 1000);
+      if (diff < 60) return "Just now";
+      const mins = Math.floor(diff / 60);
+      if (mins < 60) return `${mins}m ago`;
+      const hours = Math.floor(mins / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      if (days === 1) return "Yesterday";
+      return `${days}d ago`;
+    } catch {
+      return iso;
     }
   };
 
@@ -203,11 +222,13 @@ function Conversations() {
                     : ""
                 } bg-[#FFFFFF] rounded-[5.61px] h-12.5 px-[8.42px] py-[5.61px] flex items-center gap-[8.42px] w-full hover:bg-gray-50 transition-colors`}
               >
-                <div
-                  className="w-[19.65px] h-[19.65px] rounded-full flex justify-center items-center text-[9.82px] font-[556] flex-shrink-0"
-                  style={{ backgroundColor: `hsl(${Math.abs(conv.id.charCodeAt(0) * 13) % 360}, 70%, 70%)` }}
-                >
-                  {conv.contactName[0].toUpperCase()}
+                <div className="flex-shrink-0">
+                  {/** Use DiceBear initials avatar or fallback to initial */}
+                  <img
+                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(conv.contactName)}`}
+                    alt={conv.contactName}
+                    className="w-[19.65px] h-[19.65px] rounded-full"
+                  />
                 </div>
 
                 <div className="flex flex-col w-full">
@@ -216,7 +237,7 @@ function Conversations() {
                       {conv.contactName}
                     </span>
                     <span className="text-[7.72px] text-[#000000CC] font-[556]">
-                      {conv.timestamp}
+                      {formatRelative(conv.timestamp)}
                     </span>
                   </div>
 

@@ -1,6 +1,7 @@
 import { Conversation, Message, AIMessage } from "../types";
 import mockConversations from "../data/mockConversations";
 import mockMessages from "../data/mockMessages";
+import * as productService from "./productService";
 
 // keep in-memory copies so that sendMessage mutates them
 let conversations: Conversation[] = [...mockConversations];
@@ -44,12 +45,13 @@ export const getAIResponse = async (
   userMessage: string,
   agentName: string = process.env.NEXT_PUBLIC_AI_AGENT_NAME || "Michael"
 ): Promise<AIMessage> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
+  return new Promise(async (resolve) => {
+    // simulate typing delay
+    setTimeout(async () => {
       messageIdCounter++;
-      let reply =
-        "Thanks for reaching out! How can I assist you today?";
+      let reply = "Thanks for reaching out! How can I assist you today?";
       const msg = userMessage.toLowerCase();
+
       if (msg.includes("login")) {
         reply =
           "It looks like you are having trouble logged in. Please try resetting your password using the 'Forgot Password' link.";
@@ -60,6 +62,35 @@ export const getAIResponse = async (
         reply =
           "To cancel your subscription, go to your account settings and select 'Cancel Subscription'. Let me know if you need help.";
       }
+
+      // Product keyword handling
+      const productKeywords = ["product", "order", "item", "plan", "subscription", "pricing", "price"];
+      const hasProduct = productKeywords.some((k) => msg.includes(k));
+      if (hasProduct) {
+        try {
+          // try to extract a query term after the keyword
+          const m = userMessage.match(/\b(?:product|order|item|plan|subscription)\s+([\w-]+)/i);
+          let product = null as any;
+          if (m && m[1]) {
+            const q = m[1];
+            const res = await productService.searchProducts(q).catch(() => null);
+            if (res && Array.isArray(res.products) && res.products.length) product = res.products[0];
+          }
+          // fallback: fetch a random product
+          if (!product) {
+            const randSkip = Math.floor(Math.random() * 20);
+            const res = await productService.getProducts(1, randSkip).catch(() => null);
+            if (res && Array.isArray(res.products) && res.products.length) product = res.products[0];
+          }
+          if (product) {
+            const price = typeof product.price === 'number' ? product.price.toFixed(2) : product.price;
+            reply = `${reply} I can see you're asking about our ${product.title} priced at $${price} — let me help you with that.`;
+          }
+        } catch (e) {
+          // ignore product errors and fall back to default reply
+        }
+      }
+
       const aiMsg: AIMessage = {
         id: `msg-${messageIdCounter}`,
         conversationId: "",

@@ -3,12 +3,32 @@
 import Image from 'next/image';
 import { useInbox } from "@/store/inboxStoreV2";
 import { useConversations } from "@/hooks/useConversations";
+import { useEffect, useState } from 'react';
+import * as userService from '@/services/userService';
 
 function Details() {
     const { state } = useInbox();
     const { conversations } = useConversations("all");
     
     const activeConv = conversations.find(c => c.id === state.activeConversationId);
+    const [fullUser, setFullUser] = useState<any | null>(null);
+
+    useEffect(() => {
+        let mounted = true;
+        if (activeConv) {
+            const id = activeConv.id;
+            userService.getUserById(Number(id))
+                .then((u) => {
+                    if (mounted) setFullUser(u);
+                })
+                .catch(() => {
+                    if (mounted) setFullUser(null);
+                });
+        } else {
+            setFullUser(null);
+        }
+        return () => { mounted = false };
+    }, [activeConv]);
 
     if (!activeConv) {
         return (
@@ -24,9 +44,9 @@ function Details() {
     ] as const
 
     const CONTACT_DATA_ITEMS = [
-        { label: 'Name', value: activeConv.contactName },
-        { label: 'Status', value: activeConv.status },
-        { label: 'Channel', value: activeConv.channel },
+        { label: 'Name', value: fullUser?.name || activeConv.contactName },
+        { label: 'Email', value: fullUser?.email || activeConv.contactName + '@example.com' },
+        { label: 'Phone', value: fullUser?.phone || 'N/A' },
     ] as const
 
     const CONTACT_LABELS = activeConv.label ? [activeConv.label, activeConv.channel] : [activeConv.channel] as const
